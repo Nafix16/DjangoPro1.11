@@ -1,0 +1,92 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link href="http://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{% static "/css/base.css" %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>My pro </title>
+</head>
+
+
+
+<div id="navbar" style="">
+<nav class="navbar navbar-inverse" >
+  <div class="container-fluid" >
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Django</a>
+    </div>
+    <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="{% url "postCreate" %}">Create</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Page 3</a></li>
+    </ul>
+
+        <li>
+            <form class="navbar-form navbar-right" method="GET" action="">
+
+                <input type="text" name="find" placeholder="search post" value="{{ request.GET.find }}"/>
+                <input type="submit" value="Search"/>
+
+            </form>
+        </li>
+         <div>
+            <li><a href="{% url "register" %}"><span class="glyphicon glyphicon-log-in"> SignUp</span></a></li>
+        </div>
+  </div>
+</nav>
+</div>
+
+
+    {% for object in object_list %}
+<div class='col-sm-6 col-sm-offset-4' >
+    <div class="thumbnail" style="width: 40rem;">
+         <div class="thumbnail">
+            {% if object.image %}
+                <img src="{{ object.image.url }}" class="img-responsive" />
+            {% endif %}
+            <h1 class="card-title"><a href='{% url "id_detail" object.id %}'> {{ object.title }} </a><small>{{ object.timestamp | timesince }} ago<br></small></h1><p class="card-text">
+             <p style="color: red"> {% if object.draft %} Status: Draft (Future Post)<br> User restricted {% endif %}</p>
+             {{ object.contents | truncatechars:100 }}<br></p>
+
+            <p> <a href="{{ object.get_absolute_url }}" class="btn btn-primary" role="button">View</a>
+            <a href="{% url "postUpdate" object.id %}" class="btn btn-primary" role="button">Edit</a>
+            </p>
+            <div style="padding-left: 60%">
+            <a href="https://plus.google.com/share?url=http://your-domain{{ request.get_full_path}}"><i class="fa fa-google-plus" style="font-size:36px;color:red"></i></a>
+            <a href="http://www.linkedin.com/shareArticle?url=http://your-domain{{ request.get_full_path}}"><i class="fa fa-linkedin-square" style="font-size:36px"></i></a>
+            <a href="http://www.facebook.com/sharer/sharer.php?u=http://django.com{{ request.get_full_path}}"><i class="fa fa-facebook-official" style="font-size:36px"></i></a>
+            </div>
+            </div>
+    </div>
+</div>
+
+    {% endfor %}
+
+<div class="paginator">
+    <span class="step-links">
+        {% if object_list.has_previous %}
+            <a href="?page={{ object_list.previous_page_number }}{% if request.GET.find %} & find={{ request.GET.find }}{% endif %}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}
+        </span>
+
+        {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}{% if request.GET.find %} & find={{ request.GET.find }}{% endif %}">next</a>
+        {% endif %}
+    </span>
+</div>
+
+</body>
+</html>

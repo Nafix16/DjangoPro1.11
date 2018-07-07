@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link href="http://fonts.googleapis.com/css?family=Satisfy" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="{% static "/css/base.css" %}" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <title>Create post</title>
+</head>
+<body>
+
+<div class="col-sm-4 col-sm-offset-4 " >
+
+    <form method="POST" enctype="multipart/form-data">
+        <img src="{{ form.image.url }}" class="img-responsive" />
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Create">
+    </form>
+</div>
+</body>
+</html>
